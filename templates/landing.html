@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Landing — 8 de septiembre</title>
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='logo_xxx.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body style="background-image: url('{{ url_for('static', filename='galaxia_6.png') }}');">
+  <div class="bg-overlay"></div>
+
+  <!-- Audio: se dispara al llegar a esta página (no loop) -->
+  <audio id="bgm"
+         src="{{ url_for('static', filename='loscafresBastara.mp3') }}"
+         preload="auto"
+         autoplay
+         playsinline>
+  </audio>
+
+  <main class="landing-wrap">
+    <section class="landing-card">
+      <div class="btn-group">
+        <a class="btn-metal" href="{{ url_for('que_paso') }}">¿Qué pasó un 8 de septiembre?</a>
+        <a class="btn-metal" href="{{ url_for('coincidiendo') }}">Coincidiendo contigo</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Botón Home abajo y centrado -->
+  <div class="home-bar">
+    <a class="btn-metal btn-home" href="{{ url_for('home') }}">Volver al inicio</a>
+  </div>
+
+  <script>
+  // Intenta reproducir el audio; si el navegador bloquea el autoplay,
+  // muestra un botón "▶ Activar audio" para que el usuario lo habilite.
+  document.addEventListener('DOMContentLoaded', function () {
+    const audio = document.getElementById('bgm');
+    // Volumen opcional (0.0 a 1.0). Puedes ajustar o eliminar.
+    audio.volume = 0.9;
+
+    const tryPlay = () => {
+      const p = audio.play();
+      if (p && typeof p.then === 'function') {
+        p.catch(() => {
+          // Crear botón de activación de audio si fue bloqueado
+          const hint = document.createElement('button');
+          hint.textContent = '▶ Activar audio';
+          hint.className = 'btn-metal';
+          hint.style.marginTop = '16px';
+          const card = document.querySelector('.landing-card') || document.body;
+          card.appendChild(hint);
+          hint.addEventListener('click', () => {
+            audio.play().then(() => hint.remove());
+          });
+        });
+      }
+    };
+
+    tryPlay();
+
+    // No usamos loop: cuando termine, se queda en pausa.
+    // La próxima vez que entres a /comenzar (dando "Comenzar" de nuevo), arrancará de cero.
+    audio.addEventListener('ended', () => {
+      // Por claridad, regresamos el tiempo a 0 (pero NO reproducimos)
+      audio.currentTime = 0;
+    });
+  });
+  </script>
+</body>
+</html>
