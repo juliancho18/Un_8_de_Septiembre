@@ -182,3 +182,7 @@ body{
 .btn-home{
   padding: 12px 20px;
 }
+
+html, body { height: auto; min-height: 100%; overflow-y: auto; }
+.bg-overlay { position: fixed; inset: 0; pointer-events: none; }
+

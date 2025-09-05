@@ -12,11 +12,11 @@ def landing():
 
 @app.route("/que-paso-8-septiembre")
 def que_paso():
-    return "<h1 style='font-family: system-ui; text-align:center; margin-top:3rem;'>Timeline en construcción…</h1>"
+    return render_template("que_paso.html")
 
 @app.route("/coincidiendo-contigo")
 def coincidiendo():
-    return "<h1 style='font-family: system-ui; text-align:center; margin-top:3rem;'>Coincidiendo contigo — próximamente</h1>"
+    return render_template("coincidiendo.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
