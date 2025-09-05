@@ -11,12 +11,11 @@
   --shadow: 0 20px 60px rgba(0,0,0,0.45);
 }
 
-/* --- Fondo con imagen --- */
+/* --- Fondo con imagen (la pones inline en <body> con url(...)) --- */
 body{
   min-height: 100svh;
   color: var(--ink);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
-
   background-color: var(--bg-dark);
   background-position: center;
   background-size: cover;
@@ -34,7 +33,7 @@ body{
   pointer-events: none;
 }
 
-/* Contenedor centrado */
+/* Contenedor centrado (página principal) */
 .wrap{
   min-height: 100svh;
   display: grid;
@@ -75,7 +74,7 @@ body{
   margin-bottom: clamp(18px, 3.2vw, 28px);
 }
 
-/* Botón plano en celeste */
+/* Botón plano base en celeste */
 .btn{
   display: inline-block;
   padding: 12px 22px;
@@ -88,7 +87,6 @@ body{
   transition: transform .12s ease, box-shadow .12s ease, background .2s ease, border-color .2s ease;
   box-shadow: 0 8px 28px rgba(78,197,255,0.20);
 }
-
 .btn:hover{
   transform: translateY(-1px);
   border-color: rgba(110,198,255,0.8);
@@ -99,4 +97,88 @@ body{
 /* Ajustes responsivos pequeños */
 @media (max-width: 420px){
   .card{ padding: 22px; }
+}
+
+/* ===== Landing: layout centrado ===== */
+.landing-wrap{
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: clamp(20px, 5vw, 64px);
+}
+
+.landing-card{
+  width: min(900px, 92vw);
+  padding: clamp(28px, 6vw, 64px);
+  border-radius: 20px;
+  background: rgba(10, 22, 48, 0.55); /* glass azul oscuro */
+  border: 1px solid rgba(110,198,255,0.35);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+
+.btn-group{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  margin-top: clamp(16px, 3vw, 28px);
+}
+@media (min-width: 520px){
+  .btn-group{ flex-direction: row; }
+}
+
+/* ===== Botón metálico azul — oscuro y sin “blancos” de fondo ===== */
+.btn-metal{
+  display: inline-block;
+  padding: 14px 22px;
+  border-radius: 14px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  color: #f2f8ff; /* blanco suave para máximo contraste */
+  background:
+    /* brillo superior MUY sutil (no “blanquea” el botón) */
+    linear-gradient(120deg, rgba(255,255,255,0.06), rgba(255,255,255,0) 40%) top / 100% 55% no-repeat,
+    /* degradé metálico en azules oscuros */
+    linear-gradient(110deg, #0e2a47 0%, #10375a 28%, #12456f 52%, #165a8e 72%, #1d78c2 100%);
+  border: 1px solid rgba(80,150,255,0.55);
+  box-shadow: 0 12px 28px rgba(23,94,160,0.35), inset 0 0 0 1px rgba(255,255,255,0.06);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.35);
+  transition:
+    transform .12s ease,
+    box-shadow .12s ease,
+    filter .2s ease,
+    opacity .2s ease,
+    background .3s ease;
+}
+.btn-metal:hover{
+  transform: translateY(-1px);
+  /* “decolorar” un poquito al hover */
+  filter: saturate(0.88) brightness(1.02);
+  box-shadow: 0 16px 34px rgba(23,94,160,0.45), inset 0 0 0 1px rgba(255,255,255,0.08);
+}
+.btn-metal:active{
+  transform: translateY(0);
+  filter: saturate(0.82) brightness(0.98);
+}
+.btn-metal:focus-visible{
+  outline: 2px solid #6ec6ff;
+  outline-offset: 2px;
+}
+
+/* ===== Botón Home abajo y centrado ===== */
+.home-bar{
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  display: flex;
+  justify-content: center;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, rgba(5,10,25,0.55), rgba(5,10,25,0));
+  z-index: 10;
+}
+.btn-home{
+  padding: 12px 20px;
 }
