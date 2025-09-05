@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ titulo or "8 de septiembre" }}</title>
+
+  <!-- Favicon opcional -->
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='pitbull.ico') }}">
+
+  <!-- Hoja de estilos -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<!-- Ponemos la imagen de fondo desde Jinja para asegurarnos que sirve desde /static -->
+<body style="background-image: url('{{ url_for('static', filename='galaxia_2.jpg') }}');">
+  <div class="bg-overlay"></div>
+
+  <main class="wrap">
+    <section class="card">
+      <h1 class="title">8 de septiembre</h1>
+      <p class="subtitle">Una Fecha Especial</p>
+      <!-- Botón placeholder por si luego quieres enlazar a otra ruta -->
+      <a class="btn" href="#">Comenzar</a>
+    </section>
+  </main>
+</body>
+</html>
