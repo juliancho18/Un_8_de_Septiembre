@@ -6,86 +6,65 @@
   <title>Coincidiendo contigo</title>
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='logo_xxx.ico') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-  <style>
-    header.sticky {
-      position: sticky; top: 0; z-index: 10;
-      backdrop-filter: blur(6px);
-      background: rgba(0,0,0,0.35);
-      border-bottom: 1px solid rgba(255,255,255,0.15);
-      padding: 12px 16px;
-    }
-    .title-mystic { margin:0; font-size:1.4rem; letter-spacing:0.5px; text-align:center; }
-    .marquee { white-space: nowrap; overflow: hidden; }
-    .marquee span { display:inline-block; padding-left:100%; animation: scroll-left 15s linear infinite; }
-    @keyframes scroll-left { from{transform:translateX(0)} to{transform:translateX(-100%)} }
-    .page-wrap { max-width: 900px; margin: 24px auto; padding: 0 16px 64px; }
-    section h2 { margin-top: 28px; }
-    section p  { line-height: 1.7; opacity: 0.95; }
-  </style>
 </head>
 <body style="background-image: url('{{ url_for('static', filename='galaxia_6.png') }}');">
   <div class="bg-overlay"></div>
 
-  <!-- Audio (retoma estado) -->
-  <audio id="bgm" src="{{ url_for('static', filename='loscafresBastara.mp3') }}" preload="auto" playsinline></audio>
+  <!-- Estrella fugaz -->
+  <img id="shootingStar" src="{{ url_for('static', filename='estrella_fugaz.png') }}" alt="Estrella fugaz">
 
+  <!-- Audio compartido -->
+  <audio id="bgm" preload="auto" playsinline></audio>
+
+  <!-- Header fijo con controles + estado -->
   <header class="sticky">
+    <div class="header-controls">
+      <button id="hdrPrev" class="h-btn" title="Anterior">«</button>
+      <button id="hdrPlay" class="h-btn" title="Reproducir/Pausar">▶</button>
+      <button id="hdrNext" class="h-btn" title="Siguiente">»</button>
+      <button id="hdrRepeat" class="h-btn" title="Repetir">⟳</button>
+    </div>
+    <div id="nowPlaying" class="now-playing">Ambientación lista</div>
+
     <h1 class="title-mystic">Coincidiendo contigo</h1>
-    <div class="marquee" style="font-size:0.9rem; opacity:0.9;">
-      <span>Ambientación: Los Cafres — Bastará • Sonando en esta página • </span>
+    <div id="trackBar" class="marquee" style="font-size:.92rem;opacity:.9;">
+      <span id="trackText">
+        Sugerencia: ve a <a href="{{ url_for('landing') }}">“Comenzar”</a> y activa “Ambientar página”.
+      </span>
     </div>
   </header>
 
   <main class="page-wrap">
-    <section>
-      <h2>1. Cuando llegas, el tiempo se ordena</h2>
-      <p>
-        Hay coincidencias que no dependen del azar. Tu presencia calibra el
-        compás del día y todo parece encontrar su lugar.
-      </p>
+    <section class="reveal">
+      <h2 class="h-sub">1. Cuando llegas, el tiempo se ordena</h2>
+      <p>Hay coincidencias que no dependen del azar. Tu presencia calibra el compás del día y todo parece encontrar su lugar.</p>
     </section>
 
-    <section>
-      <h2>2. Puentes invisibles</h2>
-      <p>
-        Entre lo que sueñas y lo que ocurre, hay puentes que sólo aparecen
-        cuando caminas. Tu paso los hace reales.
-      </p>
+    <section class="reveal">
+      <h2 class="h-sub">2. Puentes invisibles</h2>
+      <p>Entre lo que sueñas y lo que ocurre, hay puentes que sólo aparecen cuando caminas. Tu paso los hace reales.</p>
     </section>
 
-    <section>
-      <h2>3. La afinación secreta</h2>
-      <p>
-        Si escuchas con calma, notarás que la vida se afina a tu tono. Y en esa
-        nota, todo empieza.
-      </p>
+    <section class="reveal">
+      <h2 class="h-sub">3. La afinación secreta</h2>
+      <p>Si escuchas con calma, notarás que la vida se afina a tu tono. Y en esa nota, todo empieza.</p>
     </section>
 
     <div style="margin-top:28px;">
-      <a class="btn-metal" href="{{ url_for('landing') }}">Volver</a>
+      <a class="btn" href="{{ url_for('landing') }}">Volver</a>
     </div>
   </main>
 
   <script>
-  const STATE_KEY = 'bgmState';
-  function saveState(audio){
-    try{ localStorage.setItem(STATE_KEY, JSON.stringify({time: audio.currentTime||0, playing: !audio.paused})); }catch(e){}
-  }
-  function loadState(){
-    try{ const raw = localStorage.getItem(STATE_KEY); return raw? JSON.parse(raw): null; }catch(e){ return null; }
-  }
-  document.addEventListener('DOMContentLoaded', async () => {
-    const audio = document.getElementById('bgm');
-    audio.volume = 0.9;
-    const prev = loadState();
-    if (prev && Number.isFinite(prev.time)) audio.currentTime = Math.max(0, prev.time - 0.2);
-    if (prev && prev.playing) { try{ await audio.play(); }catch(e){} }
-    audio.addEventListener('timeupdate', ()=>saveState(audio));
-    audio.addEventListener('play', ()=>saveState(audio));
-    audio.addEventListener('pause', ()=>saveState(audio));
-    audio.addEventListener('ended', ()=>{ audio.currentTime=0; saveState(audio); });
-    window.addEventListener('beforeunload', ()=>saveState(audio));
-  });
+    (function(){
+      const els = document.querySelectorAll('.reveal');
+      const io = new IntersectionObserver((entries)=> {
+        entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('in-view'); });
+      }, { threshold: 0.15 });
+      els.forEach(el=>io.observe(el));
+    })();
   </script>
+  <script src="{{ url_for('static', filename='shooting_star.js') }}"></script>
+  <script src="{{ url_for('static', filename='player.js') }}?v=1"></script>
 </body>
 </html>

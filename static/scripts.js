@@ -1,141 +1,40 @@
-function openModal() {
-    document.getElementById('modal-empirica').style.display = 'flex';
-}
+// Estrella fugaz mística — vuelo diagonal y aparición esporádica
+(() => {
+  const star = document.getElementById('shootingStar');
+  if (!star) return;
 
-function closeModal() {
-    document.getElementById('modal-empirica').style.display = 'none';
-}
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (reduce.matches) { star.style.display = 'none'; return; }
 
-function confirmPurchase() {
-    const checkboxes = document.querySelectorAll('#modal-empirica input[type="checkbox"]');
-    let selected = [];
+  let flying = false, nextTimer = null;
 
-    checkboxes.forEach(cb => {
-        if (cb.checked) {
-            selected.push(cb.value);
-        }
-    });
+  function rand(min, max){ return Math.random()*(max-min)+min; }
 
-    if (selected.length > 0) {
-        alert('Gracias por tu compra. Has seleccionado:\n' + selected.join(', '));
-    } else {
-        alert('Por favor selecciona al menos una opción.');
-        return; // No cerrar el modal si no selecciona nada
-    }
+  function shootOnce(){
+    if (flying) return;
+    const vw = innerWidth, vh = innerHeight;
+    const yStart = rand(vh*0.10, vh*0.45);
+    const x0 = -Math.max(80, vw*0.08);
+    const x1 = vw + Math.max(120, vw*0.12);
+    const y1 = yStart + rand(vh*0.20, vh*0.38);
+    const dur = rand(3,6);
 
-    closeModal();
-}
+    star.style.setProperty('--x0',`${x0}px`);
+    star.style.setProperty('--y0',`${yStart}px`);
+    star.style.setProperty('--x1',`${x1}px`);
+    star.style.setProperty('--y1',`${y1}px`);
+    star.style.setProperty('--dur',`${dur}s`);
 
-function openModalGuiada() {
-    document.getElementById('modal-guiada').style.display = 'flex';
-}
+    star.classList.remove('shooting'); void star.offsetWidth;
+    flying = true; star.classList.add('shooting');
 
-function closeModalGuiada() {
-    document.getElementById('modal-guiada').style.display = 'none';
-}
+    setTimeout(() => {
+      flying = false;
+      clearTimeout(nextTimer);
+      nextTimer = setTimeout(shootOnce, rand(12,28)*1000);
+    }, dur*1000);
+  }
 
-function confirmPurchaseGuiada() {
-    alert('Gracias por tu compra de la Ruta Guiada.');
-    closeModalGuiada();
-}
-
-
-function openModalpdevida() {
-    document.getElementById('modal-pdevida').style.display = 'flex';
-}
-
-function closeModalpdevida() {
-    document.getElementById('modal-pdevida').style.display = 'none';
-}
-
-function confirmPurchasepdevida() {
-    alert('Gracias por tu compra de la Ruta Propósito de Vida.');
-    closeModalpdevida();
-}
-
-
-function openModalpdevidaguiada() {
-    document.getElementById('modal-pdevidaguiada').style.display = 'flex';
-}
-
-function closeModalpdevidaguiada() {
-    document.getElementById('modal-pdevidaguiada').style.display = 'none';
-}
-
-function confirmPurchasepdevidaguiada() {
-    alert('Gracias por tu compra de la Ruta Propósito de Vida.');
-    closeModalpdevidaguiada();
-}
-
-// Confesión y desahogo
-function openModalConfesion() {
-    document.getElementById('modal-confesion').style.display = 'flex';
-}
-function closeModalConfesion() {
-    document.getElementById('modal-confesion').style.display = 'none';
-}
-function confirmPurchaseConfesion() {
-    alert('Gracias por adquirir Confesión y desahogo.');
-    closeModalConfesion();
-}
-
-// Coaching para mejorar tu cuerpo
-function openModalCoaching() {
-    document.getElementById('modal-coaching').style.display = 'flex';
-}
-function closeModalCoaching() {
-    document.getElementById('modal-coaching').style.display = 'none';
-}
-function confirmPurchaseCoaching() {
-    alert('Gracias por adquirir Coaching para mejorar tu cuerpo.');
-    closeModalCoaching();
-}
-
-// Design thinking en tu vida
-function openModalDesignThinking() {
-    document.getElementById('modal-designthinking').style.display = 'flex';
-}
-function closeModalDesignThinking() {
-    document.getElementById('modal-designthinking').style.display = 'none';
-}
-function confirmPurchaseDesignThinking() {
-    alert('Gracias por adquirir Design Thinking en tu vida.');
-    closeModalDesignThinking();
-}
-
-// Ritual misterioso
-function openModalRitual() {
-    document.getElementById('modal-ritual').style.display = 'flex';
-}
-function closeModalRitual() {
-    document.getElementById('modal-ritual').style.display = 'none';
-}
-function confirmPurchaseRitual() {
-    alert('Gracias por adquirir Ritual misterioso.');
-    closeModalRitual();
-}
-
-function openModalConocete() {
-    document.getElementById('modal-conocete').style.display = 'flex';
-}
-
-function closeModalConocete() {
-    document.getElementById('modal-conocete').style.display = 'none';
-}
-
-function confirmPurchaseConocete() {
-    alert('Gracias por adquirir el servicio Conócete aquí. Recibirás pronto tu cuestionario.');
-    closeModalConocete();
-}
-
-function acceptDisclaimer() {
-    document.getElementById('disclaimer-modal').style.display = 'none';
-}
-
-function declineDisclaimer() {
-    window.location.href = "https://www.google.com";
-}
-
-window.addEventListener('load', function () {
-    document.getElementById('disclaimer-modal').style.display = 'flex';
-});
+  nextTimer = setTimeout(shootOnce, rand(2,8)*1000);
+  addEventListener('resize', () => { if(!flying){ clearTimeout(nextTimer); nextTimer=setTimeout(shootOnce,1500); }});
+})();

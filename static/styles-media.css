@@ -1,109 +1,243 @@
+/* ===== Tipografías (puedes mover este @import al <head> si prefieres) ===== */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600..900&family=Orbitron:wght@400;700&display=swap');
+
+/* ===== Variables / base ===== */
+:root{
+  --space-bg: rgba(0,0,0,0.35);
+  --gold: #f5d26c;
+  --violet: #a67cff;
+  --electric: #caa9ff;
+  --soft: rgba(255,255,255,0.9);
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0; color:#fff; background:#000 fixed center/cover no-repeat;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+}
+
+/* Fondo (la imagen va inline en <body style="background-image: url(...);">) + velo */
+.bg-overlay{
+  position:fixed; inset:0;
+  background:
+    radial-gradient(ellipse at 30% 10%, rgba(166,124,255,.12), transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(197,173,255,.10), transparent 55%),
+    rgba(0,0,0,.35);
+  z-index:0; pointer-events:none;
+}
+
+/* ===== Contenedores generales ===== */
+.wrap, .landing-wrap{
+  min-height:100vh; display:grid; place-items:center;
+  padding:24px; position:relative; z-index:1;
+}
+.card, .landing-card{
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 16px;
+  padding: 28px 28px 32px;
+  box-shadow: 0 12px 34px rgba(0,0,0,0.35);
+  text-align: center;
+  max-width: 720px;
+}
+.page-wrap{
+  max-width:900px; margin:24px auto; padding:0 16px 64px;
+  position:relative; z-index:1;
+}
+
+/* ===== Títulos / textos ===== */
+.title, .h-mystic, .title-mystic{
+  font-family: "Cinzel", serif;
+  letter-spacing: 1px; margin: 0 0 10px;
+  background: linear-gradient(90deg,#fff,var(--gold),var(--violet),#fff);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-shadow: 0 0 18px rgba(166,124,255,0.22);
+}
+.title{ font-size:2.2rem; }
+.h-mystic, .title-mystic{ font-size:1.6rem; font-weight:800; text-align:center; }
+
+.subtitle{
+  opacity:.9; margin:0 0 16px; font-family:"Orbitron",sans-serif;
+}
+.h-sub{
+  font-family:"Orbitron",sans-serif; font-weight:700; letter-spacing:.8px;
+  color:var(--soft); display:inline-block; transition:transform .25s ease, text-shadow .25s ease;
+}
+.h-sub:hover{ transform:translateY(-2px) scale(1.02); text-shadow:0 0 8px var(--electric); }
+
+section p{ line-height:1.85; opacity:.95; }
+
+/* ===== Botones ===== */
+.btn{
+  display:inline-block; padding:.7rem 1.3rem; border-radius:12px; text-decoration:none;
+  color:#fff; font-weight:600; font-family:"Orbitron",sans-serif;
+  background:linear-gradient(145deg,#3a3a3a,#1c1c1c);
+  border:1px solid rgba(255,255,255,.18);
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.btn:hover{ transform:translateY(-2px); box-shadow:0 6px 20px rgba(166,124,255,.35); }
+
+.btn-metal{
+  display:inline-block; padding:.7rem 1.1rem; border-radius:12px; text-decoration:none; cursor:pointer;
+  color:#fff; font-family:"Orbitron",sans-serif; font-weight:700;
+  background:linear-gradient(145deg,#4a4a4a,#1e1e1e);
+  border:1px solid rgba(255,255,255,.18);
+  transition:transform .2s, box-shadow .2s, background .2s;
+}
+.btn-metal:hover{ transform:translateY(-2px); box-shadow:0 6px 20px rgba(166,124,255,.35); }
+
+.btn-group{ display:grid; gap:12px; }
+@media (min-width:560px){
+  .btn-group{ grid-auto-flow:column; grid-auto-columns:1fr; }
+}
+
+/* ===== Barra “volver al inicio” ===== */
+.home-bar{ position:fixed; left:16px; bottom:16px; z-index:12; }
+.btn-home{ padding:.6rem 1rem; }
+
+/* ===== Header adhesivo / marquee ===== */
+header.sticky{
+  position:sticky; top:0; z-index:10;
+  backdrop-filter: blur(6px);
+  background: rgba(0,0,0,0.35);
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  padding: 12px 16px;
+}
+
+.marquee{ white-space:nowrap; overflow:hidden; text-align:center; }
+.marquee span{ display:inline-block; padding-left:100%; }
+.marquee.playing span{ animation:scroll-left 15s linear infinite; }
+@keyframes scroll-left{ from{transform:translateX(0)} to{transform:translateX(-100%)} }
+
+/* ===== Reveal on scroll ===== */
+.reveal{ opacity:0; transform:translateY(12px); transition:opacity .7s ease, transform .7s ease; }
+.reveal.in-view{ opacity:1; transform:translateY(0); }
+
+/* ===== “Now Playing” + controles de header ===== */
+.header-controls{
+  display:flex; gap:8px; align-items:center; justify-content:center; margin-top:8px;
+}
+.h-btn{
+  appearance:none; border:1px solid rgba(255,255,255,0.18);
+  background:rgba(255,255,255,0.08); color:#fff; font-family:"Orbitron",sans-serif;
+  font-weight:700; padding:6px 10px; border-radius:10px; cursor:pointer;
+  transition:transform .15s ease, background .15s ease;
+}
+.h-btn:hover{ transform:translateY(-1px); background:rgba(255,255,255,0.15); }
+.h-btn.active{ box-shadow:0 0 0 2px rgba(255,255,255,0.18) inset; }
+
+.now-playing{
+  font-size:.92rem; opacity:.9; text-align:center; margin-top:6px;
+  font-family:"Orbitron",sans-serif; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+
+/* ===== Mini-player flotante (Coincidiendo) ===== */
+.mini-player{
+  position:fixed; right:16px; bottom:16px; z-index:12;
+  display:flex; align-items:center; gap:8px;
+  background:rgba(0,0,0,0.55);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:14px; padding:10px 12px; backdrop-filter:blur(6px);
+  box-shadow:0 10px 30px rgba(0,0,0,0.35);
+}
+.mini-player button{
+  appearance:none; border:none; outline:none; cursor:pointer;
+  background:rgba(255,255,255,0.08); color:#fff; font-size:14px;
+  padding:6px 8px; border-radius:10px; transition:transform .15s, background .15s;
+}
+.mini-player button:hover{ transform:translateY(-1px); background:rgba(255,255,255,0.15); }
+.mini-title{
+  max-width:180px; font-size:.9rem; opacity:.92; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  font-family:"Orbitron",sans-serif;
+}
+.mini-select{
+  background:rgba(255,255,255,0.08); color:#fff; border:1px solid rgba(255,255,255,0.15);
+  border-radius:8px; padding:4px 6px; font-size:.85rem;
+}
+
+/* ===== Imagen estrella (si no carga la imagen verás el ALT) ===== */
+#shootingStar{ position:fixed; left:12px; top:8px; width:36px; height:auto; z-index:6; opacity:.95; }
+
+/* ===== Enlaces “de contenido” (no botones) ===== */
+.page-wrap a:not(.btn):not(.btn-metal),
+.landing-card a:not(.btn):not(.btn-metal){
+  color:#cdb8ff; text-decoration:underline;
+}
+.page-wrap a:not(.btn):not(.btn-metal):hover,
+.landing-card a:not(.btn):not(.btn-metal):hover{
+  color:#eadcff;
+}
+
+/* ===== HERO (si lo usas en alguna página) ===== */
+.hero-banner{
+  min-height:70vh; display:grid; place-items:center; padding:2.5rem;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  box-shadow: 0 12px 34px rgba(0,0,0,0.35);
+}
+.hero-text{ text-align:center; color:#fff; }
+.hero-text h1{
+  margin:0 0 .5rem; font-family:"Cinzel",serif; font-size:3.2em; letter-spacing:.5px;
+  background: linear-gradient(90deg,#fff,var(--gold),var(--violet),#fff);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  text-shadow:0 0 18px rgba(166,124,255,0.22);
+}
+.tagline{ font-family:"Orbitron",sans-serif; font-size:1.15em; opacity:.95; }
+
+.container{
+  max-width:1100px; margin:0 auto; padding:2.5rem 3rem;
+}
+.intro p, .benefits ul{
+  font-size:1.05em; line-height:1.85; opacity:.95;
+}
+
+/* ======= MEDIA QUERIES ======= */
+
 /* Tablets y portátiles */
 @media (max-width: 1024px) {
-    .hero-text h1 {
-        font-size: 2.8em;
-    }
-
-    .tagline {
-        font-size: 1.2em;
-    }
-
-    .intro p,
-    .benefits ul {
-        font-size: 1em;
-        padding: 0 1.5rem;
-    }
-
-    .cta-button {
-        padding: 0.8em 1.5em;
-        font-size: 1em;
-    }
-
-    .container {
-        padding: 2rem 2rem;
-    }
+  .hero-text h1 { font-size: 2.8em; }
+  .tagline { font-size: 1.2em; }
+  .intro p, .benefits ul { font-size: 1em; padding: 0 1.5rem; }
+  .cta-button { padding: 0.8em 1.5em; font-size: 1em; }
+  .container { padding: 2rem 2rem; }
 }
 
 /* Tablets pequeñas y móviles grandes */
 @media (max-width: 768px) {
-    .hero-banner {
-        height: 60vh;
-        padding: 1.5rem;
-    }
+  .hero-banner { height: 60vh; padding: 1.5rem; }
+  .hero-text h1 { font-size: 2.2em; }
+  .tagline { font-size: 1.1em; }
 
-    .hero-text h1 {
-        font-size: 2.2em;
-    }
+  .container { max-width: 95%; padding: 2rem; }
+  .intro p, .benefits ul { padding: 0 2rem; }
 
-    .tagline {
-        font-size: 1.1em;
-    }
-
-    .container {
-        max-width: 95%;
-        padding: 2rem;
-    }
-
-    .intro p,
-    .benefits ul {
-        padding: 0 2rem;
-    }
-
-    .cta-button {
-        font-size: 0.95em;
-        padding: 0.7em 1.2em;
-    }
-
-    a {
-        color: white;
-        text-decoration: none;
-        font-size: 1em;
-    }
-
-    a:hover {
-        color: #ff0055;
-        text-decoration: underline;
-    }
+  /* Enlaces de contenido en pantallas pequeñas (no afecta .btn/.btn-metal) */
+  .landing-card a:not(.btn):not(.btn-metal),
+  .page-wrap a:not(.btn):not(.btn-metal){
+    color:#fff; text-decoration:none; font-size:1em;
+  }
+  .landing-card a:not(.btn):not(.btn-metal):hover,
+  .page-wrap a:not(.btn):not(.btn-metal):hover{
+    color:#ff0055; text-decoration:underline;
+  }
 }
 
 /* Móviles pequeños */
 @media (max-width: 480px) {
-    .hero-banner {
-        height: 50vh;
-        padding: 1.5rem;
-    }
+  .hero-banner { height: 50vh; padding: 1.5rem; }
+  .hero-text h1 { font-size: 1.8em; }
+  .tagline { font-size: 1em; }
+  .intro p, .benefits ul { font-size: 0.95em; padding: 0 1.8rem; }
+  .container { padding: 2rem 1.5rem; }
 
-    .hero-text h1 {
-        font-size: 1.8em;
-    }
-
-    .tagline {
-        font-size: 1em;
-    }
-
-    .intro p,
-    .benefits ul {
-        font-size: 0.95em;
-        padding: 0 1.8rem;
-    }
-
-    .container {
-        padding: 2rem 1.5rem;
-    }
-
-    .cta-button {
-        font-size: 0.9em;
-        padding: 0.6em 1em;
-    }
-
-    a {
-        color: white;
-        text-decoration: none;
-        font-size: 1em;
-    }
-
-    a:hover {
-        color: #ff0055;
-        text-decoration: underline;
-    }
+  .landing-card a:not(.btn):not(.btn-metal),
+  .page-wrap a:not(.btn):not(.btn-metal){
+    color:#fff; text-decoration:none; font-size:1em;
+  }
+  .landing-card a:not(.btn):not(.btn-metal):hover,
+  .page-wrap a:not(.btn):not(.btn-metal):hover{
+    color:#ff0055; text-decoration:underline;
+  }
 }

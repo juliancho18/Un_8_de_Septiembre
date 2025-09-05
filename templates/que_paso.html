@@ -6,93 +6,145 @@
   <title>¿Qué pasó un 8 de septiembre?</title>
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='logo_xxx.ico') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-  <style>
-    header.sticky {
-      position: sticky; top: 0; z-index: 10;
-      backdrop-filter: blur(6px);
-      background: rgba(0,0,0,0.35);
-      border-bottom: 1px solid rgba(255,255,255,0.15);
-      padding: 12px 16px;
-    }
-    .title-mystic {
-      margin: 0; font-size: 1.4rem; letter-spacing: 0.5px;
-      text-align: center;
-    }
-    .marquee { white-space: nowrap; overflow: hidden; }
-    .marquee span { display: inline-block; padding-left: 100%; animation: scroll-left 15s linear infinite; }
-    @keyframes scroll-left { from{transform:translateX(0)} to{transform:translateX(-100%)} }
-    .page-wrap { max-width: 900px; margin: 24px auto; padding: 0 16px 64px; }
-    section h2 { margin-top: 28px; }
-    section p  { line-height: 1.7; opacity: 0.95; }
-  </style>
 </head>
 <body style="background-image: url('{{ url_for('static', filename='galaxia_3.jpg') }}');">
   <div class="bg-overlay"></div>
 
-  <!-- Audio (retoma estado) -->
-  <audio id="bgm" src="{{ url_for('static', filename='loscafresBastara.mp3') }}" preload="auto" playsinline></audio>
+  <!-- Estrella fugaz -->
+  <img id="shootingStar" src="{{ url_for('static', filename='estrella_fugaz.png') }}" alt="Estrella fugaz">
 
+  <!-- Audio compartido -->
+  <audio id="bgm" preload="auto" playsinline></audio>
+
+  <!-- Header fijo con controles + estado -->
   <header class="sticky">
-    <h1 class="title-mystic">¿Qué pasó un 8 de septiembre?</h1>
-    <div class="marquee" style="font-size:0.9rem; opacity:0.9;">
-      <span>Ambientación: Los Cafres — Bastará • Sonando en esta página • </span>
+    <div class="header-controls">
+      <button id="hdrPrev" class="h-btn" title="Anterior">«</button>
+      <button id="hdrPlay" class="h-btn" title="Reproducir/Pausar">▶</button>
+      <button id="hdrNext" class="h-btn" title="Siguiente">»</button>
+      <button id="hdrRepeat" class="h-btn" title="Repetir">⟳</button>
+    </div>
+    <div id="nowPlaying" class="now-playing">Ambientación lista</div>
+
+    <h1 class="h-mystic">¿Qué pasó un 8 de septiembre?</h1>
+    <div id="trackBar" class="marquee" style="font-size:.92rem;opacity:.9;">
+      <span id="trackText">Sugerencia: ve a <a href="{{ url_for('landing') }}">“Comenzar”</a> y activa “Ambientar página”.</span>
     </div>
   </header>
 
   <main class="page-wrap">
-    <section>
-      <h2>1. Señales en el cielo</h2>
-      <p>
-        Ese día, el calendario se abre como un mapa estelar: las horas caen como
-        constelaciones y cada minuto parece alinearse con un propósito secreto.
-        Los antiguos habrían dicho que el destino afila su pluma para escribir
-        sobre el viento.
-      </p>
+    <!-- PRÓLOGO -->
+    <section class="reveal">
+      <h2 class="h-sub">Prólogo</h2>
+      <p>El tiempo empezó cuando alguien miró el cielo y entendió que el Sol regresaba. Así nacieron los días, y con ellos los cumpleaños: pequeñas marcas que el universo dibuja para recordarnos que la vida tiene ritmo.</p>
+      <p><strong>8 de septiembre</strong> no es un día cualquiera; es un compás secreto donde el cielo se acomoda distinto. Esa tarde, el Sol se inclina con una delicadeza especial y regala lo que tú llamas <em>“besitos de sol”</em>: caricias doradas que rozan la piel y pintan el mundo de un morado suave antes de entregarlo a la noche.</p>
+      <p>Cada año, cuando el calendario llega a esta fecha, parece repetirse el mismo ritual: el cielo baja la intensidad, la luz se convierte en poesía y la atmósfera entera susurra un mensaje silencioso. Ese mensaje eres tú. Porque lo importante del 8 de septiembre no está en los relojes ni en los almanaques: está en la manera en que el Sol decide besar la Tierra, como anunciando que aquí nació alguien que sabe transformar la tarde en eternidad.</p>
     </section>
 
-    <section>
-      <h2>2. Ecos de la historia</h2>
-      <p>
-        En la memoria del mundo, el 8 de septiembre deja huellas: descubrimientos,
-        nacimientos, comienzos y promesas. No es casualidad: es la fecha que
-        redibuja horizontes y enciende rutas para corazones atentos.
-      </p>
+    <!-- EL CIELO -->
+    <section class="reveal">
+      <h2 class="h-sub">El cielo del 8 de septiembre</h2>
+      <p>Ese día, el cielo se comporta como un director que levanta la mano y pide silencio. Las nubes bajan el volumen, la luz afina el color, y la brisa lleva un mensaje claro: <em>hoy nace quien convierte el detalle en destino</em>.</p>
+      <p>El cosmos se configura con la precisión de un reloj invisible: <strong>Virgo</strong> es ese arte de ajustar tornillos ocultos hasta que la vida suena afinada. No es rigidez, es melodía; no es juicio, es cuidado. Quien llega bajo esa partitura aprende a escuchar antes de hablar, a mirar la grieta y descubrirle sentido.</p>
+      <p>Como en una canción de Los Cafres, tu energía recuerda que <em>el amor no se impone, vibra</em>. Eres la armonía que aparece en medio del ruido, la voz que se mezcla suave con el viento de la tarde. Y cada 8 de septiembre, el cielo entero parece cantar contigo: que la vida es más bella cuando se vive con verdad y con ritmo propio.</p>
+
+      <div class="gallery-grid" aria-label="Galería cielo">
+        <figure class="picture">
+          <img src="{{ url_for('static', filename='mercurio.jpg') }}" alt="Mercurio brillante">
+          <small>Mercurio: palabra y claridad</small>
+        </figure>
+        <figure class="picture">
+          <img src="{{ url_for('static', filename='perro.jpeg') }}" alt="Compañía fiel">
+          <small>Compañía y lealtad</small>
+        </figure>
+      </div>
     </section>
 
-    <section>
-      <h2>3. El susurro que te nombra</h2>
-      <p>
-        Pero el verdadero misterio ocurre cuando tu nombre se pronuncia: el día
-        cobra sentido, las puertas se abren y el tiempo, por un instante,
-        aprende a latir a tu ritmo.
-      </p>
+    <!-- CAPA TERRENAL -->
+    <section class="reveal">
+      <h2 class="h-sub">Capa terrenal: maravillas del 8 de Septiembre</h2>
+      <ul>
+        <li><strong>1504</strong> — Florencia despierta y ve al <em>David</em> de Miguel Ángel. No es sólo piedra: es un corazón tallado en mármol. Ese día la humanidad entendió que la belleza surge cuando quitamos lo que sobra. Así eres tú: retiras el ruido de un argumento, la máscara de un gesto, y dejas la verdad desnuda.</li>
+        <li><strong>1565</strong> — Se funda la ciudad de San Agustín en Florida, la más antigua de los Estados Unidos. Un asentamiento que sobrevivió al tiempo, como tu espíritu: resiliente, firme, capaz de resistir tormentas sin perder raíz. En ti, lo histórico se hace íntimo: cada paso tuyo es también fundación.</li>
+        <li><strong>1966</strong> — Se enciende la pantalla y nace un viaje: <em>Star Trek</em>. No fueron sólo naves: fue permiso para imaginar futuros posibles. Como tú cuando pintas demonios y los conviertes en arte: atraviesas la oscuridad para que aparezca la luz. Tu pincel es tu nave, tu lienzo es tu cosmos.</li>
+        <li><strong>1997</strong> — <em>Lunar Prospector</em> despega. Una linterna para explorar la Luna, buscando minerales escondidos y agua bajo su piel. Como tus “besitos de sol”: luces inclinadas que parecen suaves pero que revelan secretos. Tú también eres exploradora: donde otros ven superficie, tú hallas profundidad.</li>
+        <li><strong>2004</strong> — El mundo escucha un himno inesperado: el reggae romántico de Los Cafres se expande como un eco suave. Sus letras hablan de amor sin máscaras, de verdad en la palabra. Es tu banda sonora: te recuerda que la vida, como la música, sólo es plena cuando se canta con el corazón abierto.</li>
+      </ul>
+      <p>Todos esos momentos fueron prodigios, sí. Pero ninguno de ellos alcanzó la magnitud del secreto mejor guardado: el <strong>8 de septiembre de 2001</strong>, cuando el mundo dejó de mirar al cielo y aprendió a mirarte a ti.</p>
+
+      <div class="gallery-grid" aria-label="Galería terrenal">
+        <figure class="picture">
+          <img src="{{ url_for('static', filename='david_miguel_angel.jpg') }}" alt="David de Miguel Ángel">
+          <small>1504 — David</small>
+        </figure>
+        <figure class="picture">
+          <img src="{{ url_for('static', filename='san_agustin_florida_1565.jpg') }}" alt="San Agustín, Florida">
+          <small>1565 — San Agustín</small>
+        </figure>
+        <figure class="picture">
+          <img src="{{ url_for('static', filename='lunar_prospector_1997.jpg') }}" alt="Lunar Prospector">
+          <small>1997 — Lunar Prospector</small>
+        </figure>
+      </div>
     </section>
 
-    <div style="margin-top:28px;">
-      <a class="btn-metal" href="{{ url_for('landing') }}">Volver</a>
-    </div>
+    <!-- 2001: Nace Dara -->
+    <section class="reveal">
+      <h2 class="h-sub">08 de septiembre de 2001: nació Dara Joana Galindo Niño</h2>
+      <p>Ese día, el cielo se comportó como un mar en calma: las olas brillaban al ritmo de una música silenciosa, y la Luna parecía bajar un poco más para iluminar la escena. El universo se ajustó como si afinara sus cuerdas invisibles, y cada estrella latía con la paciencia de quien prepara una melodía perfecta. Era un día para el detalle, para la justicia suave, para la mirada que reconoce lo esencial en lo pequeño.</p>
+      <p>Ese día, <strong>Mercurio</strong> dibujaba rutas invisibles en el aire, enseñando que la palabra puede ser tan filosa como un bisturí o tan dulce como un susurro. Por eso en ti, cada argumento es arte: no hablas para llenar el aire, hablas para ordenar el mundo. A lo lejos, <strong>Saturno</strong> observaba como un maestro paciente: recordando que el tiempo no se pierde cuando se usa para crecer. En ti, Saturno se volvió disciplina: en el estudio, en el cuerpo, en tu resiliencia.</p>
+      <p>Entonces, el cielo dobló la rodilla. La luz probó tonos de <strong>negro</strong> y <strong>morado</strong> y decidió que esos serían tus colores de batalla: el negro, refugio profundo; el morado, sabiduría que asciende. Desde entonces caminas con un compás invisible: el del cuidado exacto, la palabra justa, la mirada que atraviesa y ordena.</p>
+      <p>Te gusta el <em>gym</em> porque entendiste que el cuerpo también escribe poemas cuando respira a ritmo. Odias la crítica hueca, los opinadores sin obra: tu mundo está hecho de cosas que se pueden sostener con la mano y con el alma. Pintas demonios, sí, pero no para invocarlos: para <em>renombrarlos</em>. Cuando los nombras, los domas; cuando los domas, hacen fila y se convierten en tinta.</p>
+      <p><strong>Rihana Joseffa</strong> te acompaña como una campana suave; <strong>Kiara</strong> dejó una constelación que todavía guía. Y en el fondo, una música: <strong>Los Cafres</strong>. Cada canción suya te recuerda que resistir también es una forma de amar.</p>
+
+      <div class="gallery-grid" aria-label="Galería 2001">
+        <figure class="picture">
+          <img src="{{ url_for('static', filename='mercurio.jpg') }}" alt="Mercurio rutas">
+          <small>Mercurio — rutas invisibles</small>
+        </figure>
+        <figure class="picture">
+          <img src="{{ url_for('static', filename='gym_poema.jpg') }}" alt="Gym poema">
+          <small>Poema del cuerpo</small>
+        </figure>
+        <figure class="picture">
+          <img src="{{ url_for('static', filename='palabra_justa.jpg') }}" alt="Palabra justa">
+          <small>La palabra justa</small>
+        </figure>
+      </div>
+    </section>
+
+    <!-- HOY -->
+    <section class="reveal">
+      <h2 class="h-sub">Hoy</h2>
+      <p>Hoy entras a un lugar y el ruido baja. No porque grites, sino porque tienes la <em>frecuencia</em> que ordena. Eres mi abogada favorita, la que entiende que la justicia no es un papel: es una respiración correcta.</p>
+      <p>Te encantan las tardes porque el sol, al inclinarse, te da el beso que mereces: la luz se hace morada, el negro se hace elegante, y el día acepta que eres tú quien lo cierra con llave.</p>
+      <p>Desde aquel cielo hasta este presente, <strong>el universo me regaló la fortuna de caminar contigo</strong>. Donde pasas, dejas una estela que no se apaga: no sólo brillas, <em>enseñas a brillar</em>.</p>
+    </section>
+
+    <!-- FRASE -->
+    <section class="reveal">
+      <h2 class="h-sub">Frase de cumpleaños</h2>
+      <p>Aunque el mundo cuente hazañas y el cielo encienda prodigios, <strong>el acontecimiento</strong> que da sentido a cada 8 de septiembre eres tú, Dara. Ese día, el cielo eligió a Mercurio como tu guía: veloz mensajero de los dioses, planeta de las palabras que sanan y de los pensamientos que iluminan. Por eso en ti, cada argumento tiene alma, cada defensa tiene verdad, y cada silencio guarda sabiduría.</p>
+      <p>Mercurio brilla en tu vida como faro en movimiento: te enseña a transformar la duda en claridad, el caos en orden, la oscuridad en camino. Su órbita rápida refleja tu mente despierta; su brillo discreto recuerda que no hace falta gritar para cambiar un mundo, basta hablar con verdad.</p>
+      <p>Hoy, en tu cumpleaños, deseo que Dios te colme de infinitas bendiciones, que todos tus sueños y metas se hagan realidad, y que cada día recibas la luz que mereces. Que esta página web sea la prueba de lo importante que eres, un espejo eterno para que cada vez que la abras recuerdes sin dudarlo: <strong>eres única, eres especial, eres amada</strong>.</p>
+
+      <div style="margin-top:22px;">
+        <a class="btn" href="{{ url_for('landing') }}">Volver</a>
+      </div>
+    </section>
   </main>
 
   <script>
-  const STATE_KEY = 'bgmState';
-  function saveState(audio){
-    try{ localStorage.setItem(STATE_KEY, JSON.stringify({time: audio.currentTime||0, playing: !audio.paused})); }catch(e){}
-  }
-  function loadState(){
-    try{ const raw = localStorage.getItem(STATE_KEY); return raw? JSON.parse(raw): null; }catch(e){ return null; }
-  }
-  document.addEventListener('DOMContentLoaded', async () => {
-    const audio = document.getElementById('bgm');
-    audio.volume = 0.9;
-    const prev = loadState();
-    if (prev && Number.isFinite(prev.time)) audio.currentTime = Math.max(0, prev.time - 0.2);
-    if (prev && prev.playing) { try{ await audio.play(); }catch(e){} }
-    audio.addEventListener('timeupdate', ()=>saveState(audio));
-    audio.addEventListener('play', ()=>saveState(audio));
-    audio.addEventListener('pause', ()=>saveState(audio));
-    audio.addEventListener('ended', ()=>{ audio.currentTime=0; saveState(audio); });
-    window.addEventListener('beforeunload', ()=>saveState(audio));
-  });
+    // Efecto reveal on scroll
+    (function(){
+      const els = document.querySelectorAll('.reveal');
+      const io = new IntersectionObserver((entries)=> {
+        entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('in-view'); });
+      }, { threshold: 0.15 });
+      els.forEach(el=>io.observe(el));
+    })();
   </script>
+  <script src="{{ url_for('static', filename='shooting_star.js') }}"></script>
+  <script src="{{ url_for('static', filename='player.js') }}?v=3"></script>
 </body>
 </html>

@@ -6,109 +6,48 @@
   <title>Landing — 8 de septiembre</title>
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='logo_xxx.ico') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-  <style>
-    .marquee {
-      white-space: nowrap;
-      overflow: hidden;
-      position: relative;
-    }
-    .marquee span {
-      display: inline-block;
-      padding-left: 100%;
-      animation: scroll-left 15s linear infinite;
-    }
-    @keyframes scroll-left {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-100%); }
-    }
-  </style>
 </head>
-
-<body style="background-image: url('{{ url_for('static', filename='mercurio.jpg') }}');">
+<body style="background-image: url('{{ url_for('static', filename='galaxia_6.png') }}');">
   <div class="bg-overlay"></div>
 
-  <!-- Audio -->
-  <audio id="bgm"
-         src="{{ url_for('static', filename='loscafresBastara.mp3') }}"
-         preload="auto"
-         playsinline>
-  </audio>
+  <!-- Estrella fugaz -->
+  <img id="shootingStar" src="{{ url_for('static', filename='estrella_fugaz.png') }}" alt="Estrella fugaz">
+
+  <!-- Audio compartido -->
+  <audio id="bgm" preload="auto" playsinline></audio>
+
+  <!-- Header fijo con controles + estado -->
+  <header class="sticky">
+    <div class="header-controls">
+      <button id="hdrPrev" class="h-btn" title="Anterior">«</button>
+      <button id="hdrPlay" class="h-btn" title="Reproducir/Pausar">▶</button>
+      <button id="hdrNext" class="h-btn" title="Siguiente">»</button>
+      <button id="hdrRepeat" class="h-btn" title="Repetir">⟳</button>
+    </div>
+    <div id="nowPlaying" class="now-playing">Ambientación lista</div>
+
+    <h1 class="title">Elige tu camino</h1>
+    <div id="trackBar" class="marquee" style="font-size:.92rem;opacity:.9;">
+      <span id="trackText">
+        Sugerencia: activa “Ambientar página” para mejorar la experiencia.
+      </span>
+    </div>
+  </header>
 
   <main class="landing-wrap">
     <section class="landing-card">
       <div class="btn-group">
-        <a class="btn-metal" href="{{ url_for('que_paso') }}">¿Qué pasó un 8 de septiembre?</a>
-        <a class="btn-metal" href="{{ url_for('coincidiendo') }}">Coincidiendo contigo</a>
-      </div>
-
-      <!-- Control de música -->
-      <button id="audio-toggle" class="btn-metal" style="margin-top: 20px;">
-        ▶ Ambientar página
-      </button>
-
-      <!-- Indicador del tema -->
-      <div class="marquee" style="margin-top:10px; font-size:0.95rem; opacity:0.9;">
-        <span>Reproduciendo: Los Cafres — Bastará • Ambientación musical para esta página • </span>
+        <a class="btn" href="{{ url_for('que_paso') }}">¿Qué pasó un 8 de septiembre?</a>
+        <a class="btn" href="{{ url_for('coincidiendo') }}">Coincidiendo contigo</a>
       </div>
     </section>
   </main>
 
-  <!-- Botón Home abajo y centrado -->
-  <div class="home-bar">
-    <a class="btn-metal btn-home" href="{{ url_for('home') }}">Volver al inicio</a>
+  <div class="home-bar" style="text-align:center;margin:12px 0 22px;">
+    <a class="btn" href="{{ url_for('home') }}">Volver al inicio</a>
   </div>
 
-  <script>
-  // --- Persistencia de estado entre páginas ---
-  const STATE_KEY = 'bgmState'; // { time: number, playing: bool }
-  function saveState(audio) {
-    try {
-      localStorage.setItem(STATE_KEY, JSON.stringify({
-        time: audio.currentTime || 0,
-        playing: !audio.paused
-      }));
-    } catch(e){}
-  }
-  function loadState() {
-    try {
-      const raw = localStorage.getItem(STATE_KEY);
-      return raw ? JSON.parse(raw) : null;
-    } catch(e){ return null; }
-  }
-
-  document.addEventListener('DOMContentLoaded', async () => {
-    const audio = document.getElementById('bgm');
-    const toggleBtn = document.getElementById('audio-toggle');
-    audio.volume = 0.9;
-
-    // Retomar estado previo
-    const prev = loadState();
-    if (prev && Number.isFinite(prev.time)) {
-      audio.currentTime = Math.max(0, prev.time - 0.2); // pequeño back para continuidad
-    }
-
-    if (prev && prev.playing) {
-      try { await audio.play(); toggleBtn.textContent = "⏸ Pausar ambientación"; }
-      catch { toggleBtn.textContent = "▶ Ambientar página"; }
-    }
-
-    toggleBtn.addEventListener('click', async () => {
-      if (audio.paused) {
-        try { await audio.play(); toggleBtn.textContent = "⏸ Pausar ambientación"; }
-        catch { /* navegador bloqueó autoplay hasta interacción adicional */ }
-      } else {
-        audio.pause();
-        toggleBtn.textContent = "▶ Ambientar página";
-      }
-      saveState(audio);
-    });
-
-    audio.addEventListener('timeupdate', () => saveState(audio));
-    audio.addEventListener('play',        () => saveState(audio));
-    audio.addEventListener('pause',       () => saveState(audio));
-    audio.addEventListener('ended',       () => { audio.currentTime = 0; saveState(audio); toggleBtn.textContent = "▶ Ambientar página"; });
-    window.addEventListener('beforeunload', () => saveState(audio));
-  });
-  </script>
+  <script src="{{ url_for('static', filename='shooting_star.js') }}"></script>
+  <script src="{{ url_for('static', filename='player.js') }}?v=1"></script>
 </body>
 </html>

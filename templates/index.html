@@ -4,26 +4,46 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>{{ titulo or "8 de septiembre" }}</title>
-
-  <!-- Favicon opcional -->
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='pitbull.ico') }}">
-
-  <!-- Hoja de estilos -->
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-
-<!-- Ponemos la imagen de fondo desde Jinja para asegurarnos que sirve desde /static -->
 <body style="background-image: url('{{ url_for('static', filename='galaxia_3.jpg') }}');">
   <div class="bg-overlay"></div>
 
+  <!-- Estrella fugaz -->
+  <img id="shootingStar" src="{{ url_for('static', filename='estrella_fugaz.png') }}" alt="Estrella fugaz">
+
+  <!-- Audio compartido -->
+  <audio id="bgm" preload="auto" playsinline></audio>
+
+  <!-- Header fijo con controles + estado -->
+  <header class="sticky">
+    <div class="header-controls">
+      <button id="hdrPrev" class="h-btn" title="Anterior">«</button>
+      <button id="hdrPlay" class="h-btn" title="Reproducir/Pausar">▶</button>
+      <button id="hdrNext" class="h-btn" title="Siguiente">»</button>
+      <button id="hdrRepeat" class="h-btn" title="Repetir">⟳</button>
+    </div>
+    <div id="nowPlaying" class="now-playing">Ambientación lista</div>
+
+    <h1 class="title">8 de septiembre</h1>
+    <p class="subtitle">Una Fecha Especial</p>
+
+    <div id="trackBar" class="marquee" style="font-size:.92rem;opacity:.9;">
+      <span id="trackText">
+        Sugerencia: ve a <a href="{{ url_for('landing') }}">“Comenzar”</a> y activa “Ambientar página”.
+      </span>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
   <main class="wrap">
     <section class="card">
-      <h1 class="title">8 de septiembre</h1>
-      <p class="subtitle">Una Fecha Especial</p>
-      <!-- Botón placeholder por si luego quieres enlazar a otra ruta -->
       <a class="btn" href="{{ url_for('landing') }}">Comenzar</a>
-
     </section>
   </main>
+
+  <script src="{{ url_for('static', filename='shooting_star.js') }}"></script>
+  <script src="{{ url_for('static', filename='player.js') }}?v=1"></script>
 </body>
 </html>
