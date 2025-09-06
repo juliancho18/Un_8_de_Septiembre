@@ -169,3 +169,94 @@ section p{
 /* Enlaces normales del contenido */
 .page-wrap a:not(.btn){ text-decoration:underline; color:#cdb8ff; }
 .page-wrap a:not(.btn):hover{ color:#eadcff; }
+/* ===== Atardeceres 3D (duo) ===== */
+.duo-3d{
+  --card-w: min(46vw, 520px);
+  display:grid;
+  gap:18px;
+  grid-template-columns: repeat(2, minmax(260px, var(--card-w)));
+  justify-content:center;
+  align-items:start;
+  perspective: 1200px;           /* profundidad para el 3D */
+  margin: 6px auto 24px;
+}
+
+/* Marco / tarjeta */
+.spin-card{
+  margin:0; padding:0;
+  border-radius:18px;
+  background: rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 14px 36px rgba(0,0,0,0.38);
+  overflow:hidden;
+}
+
+/* Contenedor que rota */
+.spin3d{
+  position:relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+  animation-play-state: paused;     /* se activa al entrar en vista */
+  backface-visibility: hidden;
+}
+
+.spin3d img{
+  display:block;
+  width:100%;
+  height: min(60vh, 380px);
+  object-fit: cover;
+  transform: translateZ(0);
+}
+
+/* Leyenda sobre imagen */
+.spin-caption{
+  position:absolute; left:0; right:0; bottom:0;
+  padding:12px 16px;
+  text-align:center;
+  font-family:"Orbitron",sans-serif;
+  font-size:1.0rem; line-height:1.35;
+  color: rgba(255,255,255,.95);
+  background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.08));
+  text-shadow: 0 1px 2px rgba(0,0,0,.5);
+  pointer-events:none;
+}
+
+/* Animaciones (opuestos) */
+@keyframes spinY {
+  0%   { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+@keyframes spinYrev {
+  0%   { transform: rotateY(0deg); }
+  100% { transform: rotateY(-360deg); }
+}
+
+/* Aplicación de animación */
+.spinY{
+  animation: spinY 14s linear infinite;
+}
+.spinY-rev{
+  animation: spinYrev 16s linear infinite;
+}
+
+/* Activa animación cuando el bloque aparece en viewport
+   (tu página ya usa .reveal.in-view con IntersectionObserver) */
+.reveal.in-view .spin3d{
+  animation-play-state: running;
+}
+
+/* Pausa suave al pasar el mouse (desktop) */
+@media (hover:hover) and (pointer:fine){
+  .spin3d:hover{
+    animation-play-state: paused;
+    filter: brightness(1.02);
+  }
+}
+
+/* Responsive: una columna en móviles */
+@media (max-width: 820px){
+  .duo-3d{
+    grid-template-columns: minmax(260px, 92vw);
+  }
+}
+

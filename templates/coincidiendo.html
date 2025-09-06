@@ -6,17 +6,114 @@
   <title>Coincidiendo contigo</title>
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='logo_xxx.ico') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+  <style>
+    /* ===== Titular flotante ===== */
+    .h-float { display:inline-block; animation:titleFloat 7s ease-in-out infinite; }
+    @keyframes titleFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+
+    /* ===== Secciones de texto ===== */
+    .section-block{ margin: 30px 0 22px; }
+    .section-block p{ font-size:1.12rem; }
+    .insp{ margin-top:.7rem; opacity:.92; font-style:italic; font-family:"Orbitron",sans-serif; letter-spacing:.3px; }
+
+    /* ===== Dimmer de Mercurio al hacer scroll ===== */
+    .scroll-dimmer{ position:fixed; inset:0; pointer-events:none; z-index:0;
+      background: radial-gradient(ellipse at 50% 20%, rgba(0,0,0,0.15), rgba(0,0,0,0.55));
+      opacity: var(--dim, 0); transition: opacity .35s ease; }
+
+    /* ===== Carrusel ===== */
+    .carousel-head{ display:flex; align-items:center; justify-content:center; gap:12px; margin-top:4px; }
+    .carousel-wrap{ margin-top:18px; position:relative; z-index:1; }
+    .carousel{ display:flex; gap:18px; align-items:flex-start; overflow-x:auto; scroll-snap-type:x mandatory;
+      padding:8px 6px 38px; -webkit-overflow-scrolling:touch; }
+    .carousel::-webkit-scrollbar{ height:8px }
+    .carousel::-webkit-scrollbar-thumb{ background:linear-gradient(90deg, rgba(255,255,255,.18), rgba(255,255,255,.08)); border-radius:10px; }
+
+    .feature{ scroll-snap-align:center; min-width: 320px; max-width: 380px; width: 88vw; margin: 0 4px;
+      transition: opacity .25s ease; opacity:.55; }
+    .feature.active{ opacity:1; }
+
+    .feature-card{ border-radius:18px; overflow:hidden; position:relative; background: rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.12); box-shadow:0 12px 34px rgba(0,0,0,0.35);
+      transition: transform .28s ease, box-shadow .28s ease; will-change: transform, box-shadow; transform: scale(0.9); }
+    .feature-card.spotlight{ transform: scale(1.18); box-shadow:0 24px 54px rgba(0,0,0,0.55); z-index:2; }
+    .feature-card img{ width:100%; height:300px; object-fit:cover; display:block; transform: translateZ(0); }
+
+    .feature-caption{ position:absolute; left:0; right:0; bottom:0; padding:10px 14px;
+      background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.15));
+      font-family:"Orbitron",sans-serif; font-size:1.05rem; text-align:center; color:rgba(255,255,255,.95);
+      text-shadow:0 1px 2px rgba(0,0,0,.5);
+    }
+
+    /* ===== Caja de frase independiente ===== */
+    .quote-box{
+      margin-top:12px;
+      padding:12px 16px;
+      border-radius:14px;
+      background: radial-gradient( 120% 120% at 50% 0%, rgba(255,255,255,.10), rgba(255,255,255,.04) );
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: 0 10px 26px rgba(0,0,0,.35);
+      text-align:center;
+      min-height: 70px;         /* más alta para frases largas */
+      display:flex; align-items:center; justify-content:center;
+      opacity:.0; transform: translateY(6px);
+    }
+    .quote-box > span{
+      max-width: 680px;         /* evitar líneas demasiado largas */
+      font-style: italic;
+      font-family:"Orbitron",sans-serif;
+      font-size: 1.02rem;
+      line-height: 1.4;
+      color: rgba(255,255,255,.92);
+    }
+    .feature.active .quote-box{ animation: quoteIn 700ms ease forwards, quoteDrift 6s ease-in-out 1s infinite; }
+    @keyframes quoteIn{ from{opacity:.0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes quoteDrift{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+
+    /* ===== Botón volver ===== */
+    .btn-back{ display:inline-block; margin-top:24px; padding:.65rem 1.15rem; border-radius:12px;
+      border:1px solid rgba(255,255,255,0.18); background:linear-gradient(145deg,#3a3a3a,#1c1c1c);
+      color:#fff; font-weight:700; font-family:"Orbitron",sans-serif; text-decoration:none;
+      transition:transform .15s ease, box-shadow .15s ease, background .15s ease; }
+    .btn-back:hover{ transform:translateY(-2px); box-shadow:0 10px 24px rgba(166,124,255,.35); }
+
+    /* ===== Campo de estrellas fugaces ===== */
+    #starField{ position:fixed; inset:0; pointer-events:none; z-index:1; }
+    .shooting-star{
+      position:fixed; width:46px; height:auto; opacity:.0; filter: drop-shadow(0 0 10px rgba(255,214,120,.55));
+      transform: rotate(-18deg);
+      animation: fly 900ms ease-out forwards;
+    }
+    @keyframes fly{
+      0%   { opacity:0; transform: translate3d(0,0,0) rotate(-18deg) scale(.8); }
+      8%   { opacity:.95; }
+      100% { opacity:0; transform: translate3d(480px, -220px, 0) rotate(-18deg) scale(1.05); }
+    }
+    @media (min-width: 920px){
+      .shooting-star{ width:52px; }
+      @keyframes fly{
+        0%   { opacity:0; transform: translate3d(0,0,0) rotate(-18deg) scale(.85); }
+        8%   { opacity:.95; }
+        100% { opacity:0; transform: translate3d(640px, -280px, 0) rotate(-18deg) scale(1.1); }
+      }
+    }
+  </style>
 </head>
-<body style="background-image: url('{{ url_for('static', filename='galaxia_6.png') }}');">
+
+<body style="background-image: url('{{ url_for('static', filename='mercurio.jpg') }}');">
   <div class="bg-overlay"></div>
+  <div id="scrollDim" class="scroll-dimmer"></div>
 
-  <!-- Estrella fugaz -->
-  <img id="shootingStar" src="{{ url_for('static', filename='estrella_fugaz.png') }}" alt="Estrella fugaz">
+  <!-- Campo para las estrellas fugaces -->
+  <div id="starField"></div>
 
-  <!-- Audio compartido -->
+  <!-- Estrella estática antigua (si la quieres dejar) -->
+  <img id="shootingStar" src="{{ url_for('static', filename='estrella_fugaz.png') }}" alt="Estrella fugaz" style="display:none;">
+
+  <!-- Audio -->
   <audio id="bgm" preload="auto" playsinline></audio>
 
-  <!-- Header fijo con controles + estado -->
   <header class="sticky">
     <div class="header-controls">
       <button id="hdrPrev" class="h-btn" title="Anterior">«</button>
@@ -25,46 +122,261 @@
       <button id="hdrRepeat" class="h-btn" title="Repetir">⟳</button>
     </div>
     <div id="nowPlaying" class="now-playing">Ambientación lista</div>
-
-    <h1 class="title-mystic">Coincidiendo contigo</h1>
-    <div id="trackBar" class="marquee" style="font-size:.92rem;opacity:.9;">
-      <span id="trackText">
-        Sugerencia: ve a <a href="{{ url_for('landing') }}">“Comenzar”</a> y activa “Ambientar página”.
-      </span>
-    </div>
+    <h1 class="title-mystic h-float">Coincidiendo contigo</h1>
   </header>
 
   <main class="page-wrap">
-    <section class="reveal">
+    <!-- ===== Texto poético ===== -->
+    <section class="section-block reveal" style="text-align:center;">
       <h2 class="h-sub">1. Cuando llegas, el tiempo se ordena</h2>
       <p>Hay coincidencias que no dependen del azar. Tu presencia calibra el compás del día y todo parece encontrar su lugar.</p>
+      <p>Contigo, hasta lo pequeño adquiere eje. No es suerte: es <strong>precisión afectiva</strong>.</p>
+      <div class="insp">Cada momento contigo tiene la exactitud de una órbita que sólo entiende el corazón.</div>
     </section>
 
-    <section class="reveal">
+    <section class="section-block reveal" style="text-align:center;">
       <h2 class="h-sub">2. Puentes invisibles</h2>
-      <p>Entre lo que sueñas y lo que ocurre, hay puentes que sólo aparecen cuando caminas. Tu paso los hace reales.</p>
+      <p>Entre lo que sueñas y lo que ocurre, levantas puentes que sólo aparecen cuando caminas.</p>
+      <p>Compartir contigo es aprender a mirar distinto: el mundo se vuelve <em>sentido que avanza</em>.</p>
+      <div class="insp">Aprendo cada vez que sonreímos juntos: tu risa es el mapa del camino que no se pierde.</div>
     </section>
 
-    <section class="reveal">
+    <section class="section-block reveal" style="text-align:center;">
       <h2 class="h-sub">3. La afinación secreta</h2>
-      <p>Si escuchas con calma, notarás que la vida se afina a tu tono. Y en esa nota, todo empieza.</p>
+      <p>Si escuchas con calma, notarás que la vida se afina a tu tono. No es volumen: es <strong>armonía</strong>.</p>
+      <p>Por eso los planes funcionan y los gestos dicen lo justo: la melodía aparece y se queda.</p>
+      <div class="insp">Donde posas la mirada, la tarde aprende a quedarse un poco más.</div>
     </section>
 
-    <div style="margin-top:28px;">
-      <a class="btn" href="{{ url_for('landing') }}">Volver</a>
-    </div>
+    <!-- ===== Carrusel ===== -->
+    <section class="reveal">
+      <div class="carousel-head">
+        <h2 class="h-sub h-float">Nuestros momentos</h2>
+      </div>
+
+      <div class="carousel-wrap">
+        <div class="carousel" id="carousel">
+          <!-- 1 -->
+          <figure class="feature">
+            <div class="feature-card">
+              <img loading="lazy" src="{{ url_for('static', filename='juliDara1.jpeg') }}" alt="Juli & Dara 1">
+              <div class="feature-caption">Mercurio: palabra y claridad</div>
+            </div>
+            <div class="quote-box"><span>“Tu lógica en calma alinea los días.”</span></div>
+          </figure>
+
+          <!-- 2 -->
+          <figure class="feature">
+            <div class="feature-card">
+              <img loading="lazy" src="{{ url_for('static', filename='juliDara2.jpeg') }}" alt="Juli & Dara 2">
+              <div class="feature-caption">Cuidado exacto: el detalle que abraza</div>
+            </div>
+            <div class="quote-box"><span>“En tu mirada, la bruma se vuelve mapa; caminar contigo es comprender.”</span></div>
+          </figure>
+
+          <!-- 3 -->
+          <figure class="feature">
+            <div class="feature-card">
+              <img loading="lazy" src="{{ url_for('static', filename='juliDara3.jpeg') }}" alt="Juli & Dara 3">
+              <div class="feature-caption">Saturno: constancia y raíz</div>
+            </div>
+            <div class="quote-box"><span>“De tu constancia aprendo el idioma del tiempo: paciencia que construye.”</span></div>
+          </figure>
+
+          <!-- 4 -->
+          <figure class="feature">
+            <div class="feature-card">
+              <img loading="lazy" src="{{ url_for('static', filename='juliDara4.jpeg') }}" alt="Juli & Dara 4">
+              <div class="feature-caption">Negro & morado: refugio y sabiduría</div>
+            </div>
+            <div class="quote-box"><span>“Tus colores enseñan a la noche a quedarse sin miedo.”</span></div>
+          </figure>
+
+          <!-- 5 -->
+          <figure class="feature">
+            <div class="feature-card">
+              <img loading="lazy" src="{{ url_for('static', filename='juliDara5.jpeg') }}" alt="Juli & Dara 5">
+              <div class="feature-caption">Compás invisible: ritmo que ordena</div>
+            </div>
+            <div class="quote-box"><span>“Tu paso corrige órbitas: lo cotidiano se alinea.”</span></div>
+          </figure>
+
+          <!-- 6 (nota: extensión .jpg) -->
+          <figure class="feature">
+            <div class="feature-card">
+              <img loading="lazy" src="{{ url_for('static', filename='juliDara6.jpg') }}" alt="Juli & Dara 6">
+              <div class="feature-caption">Verdad suave: belleza sin máscara</div>
+            </div>
+            <div class="quote-box"><span>“Cuando enfocas, las constelaciones hallan coordenadas.”</span></div>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <a class="btn-back" href="{{ url_for('landing') }}">Volver</a>
   </main>
 
   <script>
+    /* ===== Reveal on scroll ===== */
     (function(){
       const els = document.querySelectorAll('.reveal');
-      const io = new IntersectionObserver((entries)=> {
-        entries.forEach(en=>{ if(en.isIntersecting) en.target.classList.add('in-view'); });
-      }, { threshold: 0.15 });
+      const io = new IntersectionObserver((entries)=>entries.forEach(en=>{
+        if(en.isIntersecting) en.target.classList.add('in-view');
+      }), { threshold: 0.15 });
       els.forEach(el=>io.observe(el));
     })();
+
+    /* ===== Dimmer de fondo ===== */
+    (function(){
+      const dim = document.getElementById('scrollDim');
+      const max = 600;
+      function onScroll(){
+        const y = window.scrollY || 0;
+        const t = Math.min(1, Math.max(0, y / max));
+        dim.style.setProperty('--dim', (0.25 + 0.45*t).toFixed(3));
+        dim.style.opacity = getComputedStyle(dim).getPropertyValue('--dim');
+      }
+      window.addEventListener('scroll', onScroll, {passive:true});
+      onScroll();
+    })();
+
+    /* ===== Player persistente en todas las páginas ===== */
+    const STATE_KEY = 'bgmStateV2';
+    const PLAYLIST = [
+      { src: "{{ url_for('static', filename='loscafresBastara.mp3') }}",         title: "Los Cafres — Bastará" },
+      { src: "{{ url_for('static', filename='bob_marley.mp3') }}",               title: "Bob Marley — Could You Be Loved" },
+      { src: "{{ url_for('static', filename='los_cafres_sielamorsecae.mp3') }}", title: "Los Cafres — Si el amor se cae" }
+    ];
+    function loadState(){ try{ const r=localStorage.getItem(STATE_KEY); return r? JSON.parse(r):null }catch(e){return null} }
+    function saveState(a, track){ try{ localStorage.setItem(STATE_KEY, JSON.stringify({time:a.currentTime||0, playing:!a.paused, track})) }catch(e){} }
+    function updateNow(isPlaying, title){
+      const now = document.getElementById('nowPlaying');
+      now.textContent = isPlaying ? `Now Playing: ${title}` : 'Ambientación lista';
+      const btn = document.getElementById('hdrPlay');
+      if(btn) btn.textContent = isPlaying ? '⏸' : '▶';
+    }
+
+    document.addEventListener('DOMContentLoaded', async ()=>{
+      const audio = document.getElementById('bgm');
+      if(!audio) return;
+
+      const hdrPrev = document.getElementById('hdrPrev');
+      const hdrPlay = document.getElementById('hdrPlay');
+      const hdrNext = document.getElementById('hdrNext');
+      const hdrRepeat = document.getElementById('hdrRepeat');
+
+      audio.volume = 0.9;
+      const prev = loadState();
+      let currentTrack = (prev && Number.isFinite(prev.track)) ? prev.track : 0;
+      let repeatMode = false;
+
+      function setSrc(){ audio.src = PLAYLIST[currentTrack].src; }
+      setSrc();
+      if(prev && Number.isFinite(prev.time)) audio.currentTime = Math.max(0, prev.time - 0.2);
+      if(prev && prev.playing){ try{ await audio.play(); }catch{} }
+      updateNow(!audio.paused, PLAYLIST[currentTrack].title);
+
+      function nextTrack(auto=false){
+        currentTrack = (currentTrack + 1) % PLAYLIST.length;
+        const wasPlaying = !audio.paused || auto;
+        setSrc(); audio.currentTime=0;
+        if(wasPlaying){ audio.play().catch(()=>{}); }
+        updateNow(!audio.paused, PLAYLIST[currentTrack].title);
+        saveState(audio, currentTrack);
+      }
+      function prevTrack(){
+        currentTrack = (currentTrack - 1 + PLAYLIST.length) % PLAYLIST.length;
+        const wasPlaying = !audio.paused;
+        setSrc(); audio.currentTime=0;
+        if(wasPlaying){ audio.play().catch(()=>{}); }
+        updateNow(!audio.paused, PLAYLIST[currentTrack].title);
+        saveState(audio, currentTrack);
+      }
+
+      hdrPrev?.addEventListener('click', prevTrack);
+      hdrNext?.addEventListener('click', ()=> nextTrack(false));
+      hdrPlay?.addEventListener('click', async ()=>{
+        if(audio.paused){ try{ await audio.play(); }catch{} } else { audio.pause(); }
+        updateNow(!audio.paused, PLAYLIST[currentTrack].title);
+        saveState(audio, currentTrack);
+      });
+      hdrRepeat?.addEventListener('click', ()=>{
+        repeatMode = !repeatMode; audio.loop = repeatMode;
+        hdrRepeat.classList.toggle('active', repeatMode);
+      });
+
+      ['timeupdate','play','pause'].forEach(ev=>{
+        audio.addEventListener(ev, ()=>{ updateNow(!audio.paused, PLAYLIST[currentTrack].title); saveState(audio, currentTrack); });
+      });
+      audio.addEventListener('ended', ()=>{ if(!audio.loop) nextTrack(true); });
+      window.addEventListener('beforeunload', ()=> saveState(audio, currentTrack));
+    });
+
+    /* ===== Carrusel con spotlight (5s) ===== */
+    (function(){
+      const strip = document.getElementById('carousel');
+      if(!strip) return;
+      const figures = Array.from(strip.querySelectorAll('.feature'));
+      const cards   = figures.map(f => f.querySelector('.feature-card'));
+      if(cards.length === 0) return;
+
+      let idx = 0, paused=false, timer=null;
+
+      function centerHorizontally(i){
+        const el = figures[i];
+        const left = el.offsetLeft - (strip.clientWidth - el.clientWidth)/2;
+        strip.scrollTo({ left, behavior:'smooth' });
+      }
+      function activate(i){
+        cards.forEach((c,k)=>{
+          c.classList.toggle('spotlight', k===i);
+          figures[k].classList.toggle('active', k===i);
+        });
+        centerHorizontally(i);
+        clearTimeout(timer);
+        timer = setTimeout(()=>{ if(!paused){ idx=(idx+1)%cards.length; activate(idx); } }, 5000);
+      }
+      strip.addEventListener('mouseenter', ()=>{ paused=true; clearTimeout(timer); });
+      strip.addEventListener('mouseleave', ()=>{ if(paused){ paused=false; clearTimeout(timer); timer=setTimeout(()=>{ idx=(idx+1)%cards.length; activate(idx); }, 1200);} });
+      strip.addEventListener('touchstart', ()=>{ paused=true; clearTimeout(timer); }, {passive:true});
+      strip.addEventListener('touchend',   ()=>{ paused=false; clearTimeout(timer); timer=setTimeout(()=>{ idx=(idx+1)%cards.length; activate(idx); }, 1400); }, {passive:true});
+
+      activate(idx);
+    })();
+
+    /* ===== Estrellas fugaces aleatorias =====
+       Cambia STAR_SRC si subiste un PNG nuevo para la estrella. */
+    (function(){
+      const STAR_SRC = "{{ url_for('static', filename='estrella_fugaz.png') }}"; // <-- reemplaza si usas otro nombre
+      const field = document.getElementById('starField');
+      if(!field) return;
+
+      function spawnStar(){
+        // posiciones aleatorias alrededor del viewport (parte baja/izq)
+        const y = window.innerHeight - Math.random()*window.innerHeight*0.6; // más frecuente media/baja
+        const x = Math.random() * window.innerWidth * 0.3 - 60;              // un poco antes de la pantalla
+
+        const img = document.createElement('img');
+        img.src = STAR_SRC;
+        img.className = 'shooting-star';
+        img.style.left = `${x}px`;
+        img.style.top  = `${y}px`;
+
+        field.appendChild(img);
+        img.addEventListener('animationend', ()=> img.remove());
+      }
+
+      function loop(){
+        // entre 2 y 5 segundos
+        const next = 2000 + Math.random()*3000;
+        spawnStar();
+        setTimeout(loop, next);
+      }
+      setTimeout(loop, 1200 + Math.random()*1800);
+    })();
   </script>
+
+  <!-- (Opcional) tu script de estrella anterior -->
   <script src="{{ url_for('static', filename='shooting_star.js') }}"></script>
-  <script src="{{ url_for('static', filename='player.js') }}?v=1"></script>
 </body>
 </html>
